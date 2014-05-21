@@ -1,0 +1,19 @@
+style tbody tr { cursor: pointer }
+.jumbotron(ng-hide='outs.length !==0')
+	h1 Aucune sortie vers production pour ce lot
+	p Il n'y a toujours pas de sortie vers production pour ce lot de {{lot.plantname}}. Le bouton ci-dessous pourrait vous aider.
+.row(ng-hide='outs.length === 0')
+	.page-header: h1 Lot de {{lot.plantname}} du {{lot.date | date}} 
+		small Sorties vers production
+	.table-responsive: table.table-striped.table-hover.table
+		thead
+			th Date
+			th Quantité brute
+			th Quantité nette
+		tbody
+			tr(ng-repeat='out in outs')
+				td {{out.date | date}}
+				td {{out.raw}}
+				td {{out.net}}
+a.btn.btn-lg.btn-block.btn-primary(href='#/plants/{{lot.plantid}}/lots/{{lot.id}}/outs/new') Nouvelle sortie 
+	span.glyphicon.glyphicon-plus-sign

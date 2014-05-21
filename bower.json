@@ -1,0 +1,14 @@
+{
+  "name": "application-name",
+  "version": "0.0.3",
+  "private": true,
+  "directory": "public/bowers",
+  "dependencies": {
+    "angular-resource": "*",
+    "angular-latest": "*",
+    "angular-route": "*",
+    "bootstrap": "*",
+    "jquery": "*",
+    "ng-file-upload": "~1.4.0"
+  }
+}

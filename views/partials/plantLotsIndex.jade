@@ -1,0 +1,25 @@
+style tbody tr { cursor: pointer }
+.jumbotron(ng-hide='lots.length !==0')
+	h1 Pas de lots
+	p Il n'y a pas de lots en stock pour la plant {{plant.name}}
+.row(ng-hide='lots.length === 0')
+	.page-header: h1 {{plant.name}} 
+		small Lots en stock
+	.table-responsive: table.table.table-hover.table-striped
+		thead
+			th Date
+			th Quantité (kg)
+			th Reste (kg)
+			th Montant
+			th Vendeur
+			th Téléphone
+		tbody
+			tr(data-target='#modal', data-toggle='modal', ng-repeat='lot in lots', ng-click="setLotId(lot._id)")
+				td {{lot.date | date}}
+				td {{lot.quantity}}
+				td {{lot.remaining}}
+				td {{lot.price | currency:'د.م.'}}
+				td {{lot.seller.name}}
+				td {{lot.seller.tel}}
+a.btn-lg.btn.btn-block.btn-primary(href='#/plants/{{plant.id}}/lots/new') Nouvelle arrivée 
+	span.glyphicon.glyphicon-plus-sign

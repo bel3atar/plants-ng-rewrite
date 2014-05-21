@@ -1,0 +1,29 @@
+form(name='f', novalidate, role='form')
+	fieldset
+		.form-group
+			label.control-label(for='date') Date
+			input#date.form-control.input-lg(
+				required, ng-model='out.date', type='date', name='date'
+			)
+		.form-group(ng-class="{'has-error': f.raw.$invalid}")
+			label.control-label(for='raw') Quantité brute
+			input#raw.form-control.input-lg(
+				required,
+				name='raw',
+				ng-model='out.raw',
+				max='{{lot.quantity - lot.out}}',
+				type='number',
+				step=0.01
+			)
+		.form-group(ng-class="{'has-error': f.net.$invalid && f.net.$dirty}")
+			label.control-label(for='net') Quantité nette
+			input#net.form-control.input-lg(
+				required,
+				ng-model='out.net',
+				ng-max='out.raw',
+				type='number',
+				step=0.01,
+				name='net'
+			)
+		button.btn.btn-primary.btn-block.btn-lg(ng-disabled='f.$invalid', ng-click='save()') Ajouter 
+			span.glyphicon.glyphicon-plus-sign

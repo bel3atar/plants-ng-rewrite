@@ -1,0 +1,24 @@
+h1 Nouveau lot
+form(name='f', role='form', novalidate)
+	.form-group(ng-class="{'has-error': f.quantity.$invalid && f.quantity.$dirty}")
+		label(for='quantity') Quantité
+		.input-group-lg.input-group
+			input.form-control(required, step='0.01', type='number', min='0.01', ng-model='lot.quantity', id='quantity', name='quantity')
+			span.input-group-addon kg
+	.form-group(ng-class="{'has-error': f.price.$invalid && f.price.$dirty}"): .input-group-lg
+		label(for='price') Prix
+		.input-group-lg.input-group
+			span.input-group-addon MAD
+			input.form-control(required, step='0.01', name='price', type='number', min='0', id='price', ng-model='lot.price')
+	.form-group: .input-group-lg
+		label(for='date') Date
+		input.form-control(required, type='date', name='date', id='date', ng-model='lot.date')
+	.form-group: .input-group-lg
+		label(for='seller.name') Vendeur
+		input.form-control(required, type='text', name='seller.name', id='seller.name', ng-model='lot.seller.name')
+	.form-group: .input-group-lg
+		label(for='tel') Téléphone du vendeur
+		input.form-control(required, type='tel', name='tel', id='tel', ng-model='lot.seller.tel')
+	.form-group: .input-group-lg
+		button.btn.btn-primary.btn-lg.btn-block(ng-click='add()') Ajouter 
+			span.glyphicon.glyphicon-plus-sign

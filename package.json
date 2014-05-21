@@ -1,0 +1,21 @@
+{
+  "name": "application-name",
+  "version": "0.0.3",
+  "private": true,
+  "scripts": {
+		"postinstall": "bower install",
+    "start": "node app.js"
+  },
+	"dependencies": {
+		"jade": "*",
+		"bower": "*",
+		"express": "4.*",
+		"mongoose": "*",
+		"morgan": "*",
+		"body-parser": "*",
+		"method-override": "*",
+		"errorhandler": "*",
+		"passport": "*",
+		"multer": "*"
+	}
+}
