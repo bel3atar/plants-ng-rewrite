@@ -1,7 +1,8 @@
 .jumbotron
 	.row
 		.col-md-8
-			h1 {{plant.name}}
+			h1 {{plant.name}} 
+				small PMUP: {{plant.pmup | currency:'MAD'}} 
 			p {{plant.desc}}
 			p
 				a.btn.btn-primary(href='#/plants/{{plant._id}}/lots') Lots en stock 

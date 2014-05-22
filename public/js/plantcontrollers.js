@@ -2,13 +2,19 @@
 
 angular.module('plantControllers', ['angularFileUpload'])
 
-.controller('PlantNewCtrl', ['$scope', 'Plant', '$upload',
-	function ($scope, Plant, $upload) {
+.controller('PlantNewCtrl', ['$scope', 'Plant', '$upload', '$location',
+	function ($scope, Plant, $upload, $location) {
 		$scope.btnCaption = 'Ajouter';
 		$scope.file = null;
 		$scope.getFile = function (file) { $scope.file = file; };
 		$scope.save = function () {
-			Plant.save({id: $scope.id});
+			$upload.upload({
+				url: '/plants',
+				data: $scope.plant, 
+				file: $scope.file
+			}).success(function () {
+				$location.path('/plants');
+			});
 		};
 	}
 ])
@@ -40,8 +46,8 @@ angular.module('plantControllers', ['angularFileUpload'])
 		};
 		$scope.confirm = function () {
 			Plant.remove({id: $scope.delId}, function () {
-				$scope.plants = Plant.query(function () {
-					$scope.quadruplets = shapeData($scope.plants);
+				var data = Plant.query(function () {
+					$scope.quadruplets = shapeData($filter('orderBy')(data.plants, 'name'));
 				});
 				$('#deleteModal').modal('hide');
 			});
@@ -69,10 +75,10 @@ angular.module('plantControllers', ['angularFileUpload'])
 	}
 ])
 
-.controller('PlantLotsNewCtrl', ['$routeParams', '$scope', 'Lot',
-	function ($params, $scope, Lot, $loc) {
+.controller('PlantLotsNewCtrl', ['$routeParams', '$scope', 'Plant',
+	function ($params, $scope, Plant) {
 		$scope.add = function () {
-			Lot.save({plant: $params.plant}, $scope.lot, function () {
+			Plant.save({id: $params.plant, action: 'lots'}, $scope.lot, function () {
 				$loc.path('/plants/' + $params.plant + '/lots');
 			});
 		};
@@ -102,6 +108,7 @@ angular.module('plantControllers', ['angularFileUpload'])
 		$scope.save = function () {
 			console.log($rps);
 			Lot.save({lot: $rps.lot, action: 'outs'}, $scope.out, function () {
+				console.log($loc);
 				$loc.path('/plants/' + $rps.plant + '/lots/' + $rps.lot + '/outs');			
 			});
 		};

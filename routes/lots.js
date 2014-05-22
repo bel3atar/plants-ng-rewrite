@@ -61,20 +61,32 @@ module.exports = function (app) {
 	});
 	//lots create
 	app.post('/plants/:plant/lots', function (req, res, next) {
-		Plant.findByIdAndUpdate(req.params.plant, 
-		{$push: {lots: {
-				date: req.body.date,
-				quantity: req.body.quantity,
-				price: req.body.price,
-				seller: {
-					name: req.body.seller.name,
-					tel: req.body.seller.tel
-				}
-		}}},
-		{pmup:  function (err, item) {
-			if (err) next(err);
-			else if (!item) next();
-			else res.send(200);
+		console.log('HIT');
+		Plant.findById(req.params.plant, 'pmup lots', function (err, plant) {
+			var cb = function (err) { if (err) next(err); else res.send(200);};
+			if (err) return cb(err);
+			if (plant.pmup) {
+				var somme = 0.0;
+				for (var i = 0; i < plant.lots.length; ++i)
+					somme += plant.lots[i].quantity;
+				var pmup = 
+					(somme * plant.pmup + req.body.price * req.body.quantity) /
+					(somme + req.body.quantity);
+				Plant.findByIdAndUpdate(
+					req.params.plant,
+					{
+						$set: {pmup: pmup},
+						$push: {lots: req.body}
+					},
+					cb
+				);
+			} else {
+				Plant.findByIdAndUpdate(
+					req.params.plant,
+					{$set: {pmup: req.body.price}, $push: {lots: req.body}},
+					cb
+				);
+			}
 		});
 	});
 };

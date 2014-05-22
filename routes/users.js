@@ -20,7 +20,7 @@ module.exports = function (app) {
 	app.get('/users', function (req, res, next) {
 		User.find().sort('name').exec(function (err, users) {
 			if (err) next(err);
-			res.render('users/index', {users: users, title: 'Liste des utilisateurs'});
+			res.json(users);
 		});
 	});
 	//create
@@ -32,18 +32,14 @@ module.exports = function (app) {
 			password: req.body.password
 		}).save(function (err, user) {
 			if (err) next(err);
-			else {
-				res.redirect('/users');
-				console.log('added user to db: ');
-				console.log(user);
-			}
+			else res.send(200);
 		});
 	});
 	//delete
 	app.delete('/users/:user', function (req, res, next) {
 		User.findByIdAndRemove(req.params.user, function (err, pl) { 
-			if (err) {console.error(err);next(err);}
-			else res.redirect('/users');
+			if (err) next(err);
+			else res.send(200);
 		});
 	});
 	//edit

@@ -1,0 +1,20 @@
+.row: .table-responsive
+	table.table.table-striped.table-hover
+		thead
+			th Nom
+			th Nom d'utlisateur
+			th Rôle
+			th Commandes
+		tbody
+			tr(ng-repeat='user in users')
+				td {{user.name}}
+				td {{user.username}}
+				td {{user.role}}
+				td: .btn-group
+					button.btn.btn-danger.btn-sm(ng-click='delete(user._id)')
+						span.glyphicon.glyphicon-trash
+					a.btn.btn-warning.btn-sm(href='#/users/{{user._id}}/edit')
+						span.glyphicon.glyphicon-pencil
+.row
+	a.btn.btn-lg.btn-primary.btn-block(href='#/users/new') Nouvel utilisateur 
+		span.glyphicon.glyphicon-plus-sign

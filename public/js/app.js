@@ -41,6 +41,10 @@ var app = angular.module('greenex', ['ngRoute', 'userControllers', 'plantControl
 			templateUrl: '/partials/userShow',
 			controller: 'UserShowCtrl'
 		})
+		.when('/users/:id/edit', {
+			templateUrl: '/partials/userForm',
+			controller: 'UserEditCtrl'
+		})
 		.when('/plants', {
 			templateUrl: '/partials/plantIndex',
 			controller: 'PlantIndexCtrl'

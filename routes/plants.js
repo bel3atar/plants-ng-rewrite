@@ -9,20 +9,21 @@ module.exports = function (app) {
 	});
 	//index
 	app.get('/plants', function (req, res, next) {
-		Plant.find({}, 'image name desc _id', function (err, plants) {
+		Plant.find({}, 'pmup image name desc _id', function (err, plants) {
 			if (err) next(err);
 			else res.json({plants: plants});
 		});
 	});
 	//create
 	app.post('/plants', function (req, res, next) {
+		console.log(req);
 		new Plant({
 			name: req.body.name,
 			desc: req.body.desc,
-			image: req.files.pic.name
+			image: req.files.file.name
 		}).save(function (err, pl) {
 			if (err) next(err);
-			else res.redirect('/plants');
+			else res.send(200);
 			console.log(pl + ' saved to db');
 		});
 	});
@@ -42,13 +43,6 @@ module.exports = function (app) {
 					}
 				});
 			}
-		});
-	});
-	//edit
-	app.get('/plants/:plant/edit', function (req, res, next) {
-		Plant.findById(req.params.plant, '_id name desc', function (err, plant) {
-			if (err) next(err);
-			else res.render('plants/edit', {plant:plant, title: 'Modifier une plante'});
 		});
 	});
 	//update
