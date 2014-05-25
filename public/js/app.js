@@ -2,7 +2,31 @@
 function isEmpty(value) {
 	return angular.isUndefined(value) || value === '' || value === null || value !== value;
 }
-var app = angular.module('greenex', ['ngRoute', 'userControllers', 'plantControllers', 'appServices'])
+var app = angular.module('greenex', ['ngRoute', 'userControllers', 'plantControllers', 'appServices', 'toaster'])
+.controller('rootCtrl', ['$location', '$window',
+	function ($location, $window) {
+		if ($window.sessionStorage.token)
+			$location.path('/plants');
+		else
+			$location.path('/login');
+	}
+])
+.factory('authInterceptor', ['$rootScope', '$q', '$window', '$location',
+	function ($rootScope, $q, $window, $location) {
+		return {
+			request: function (config) {
+				config.headers = config.headers || {};
+				if ($window.sessionStorage.token)
+					config.headers.Authorization = 
+						'Bearer ' + $window.sessionStorage.token;
+				return config;
+			},
+			responseError: function (rejection) {
+				return $q.reject(rejection);
+			}
+		};
+	}
+])
 .directive('ngMax', function() {
 	return {
 		restrict: 'A',
@@ -77,11 +101,14 @@ var app = angular.module('greenex', ['ngRoute', 'userControllers', 'plantControl
 			templateUrl: '/partials/plantForm',
 			controller: 'PlantEditCtrl'
 		})
-		.otherwise({redirectTo: '/plants'});
+		.when('/login', {
+			templateUrl: '/partials/login',
+			controller: 'LoginCtrl'
+		})
+		.when('/', {controller: 'rootCtrl', template: ''})
+		.otherwise({redirectTo: '/'});
 	}
 ])
-.directive('madmax', function () {
-	return function (scope, element) {
-		console.log(element);
-	};
-});
+.config(['$httpProvider', function ($httpProvider) {
+	$httpProvider.interceptors.push('authInterceptor');
+}])

@@ -5,17 +5,21 @@ html(lang='fr', ng-app='greenex')
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
 		link(rel='stylesheet', href='/bowers/bootstrap/dist/css/bootstrap.min.css')
+		link(rel='stylesheet', href='/bowers/angular-notify-toaster/toaster.css')
 		script(src='/bowers/jquery/dist/jquery.min.js')
 		script(src='/bowers/bootstrap/dist/js/bootstrap.min.js')
 		script(src='/bowers/angular/angular.min.js')
+		script(src='/bowers/angular-animate/angular-animate.min.js')
 		script(src='/bowers/angular-route/angular-route.min.js')
 		script(src='/bowers/angular-resource/angular-resource.min.js')
+		script(src='/bowers/angular-notify-toaster/toaster.js')
 		script(src='/bowers/ng-file-upload/angular-file-upload.min.js')
 		script(src='/js/usercontrollers.js')
 		script(src='/js/plantcontrollers.js')
 		script(src='/js/services.js')
 		script(src='/js/app.js')
 	body
+		toaster-container
 		nav.navbar.navbar-default(role='navigation')
 			.container-fluid
 				.navbar-header
@@ -24,13 +28,13 @@ html(lang='fr', ng-app='greenex')
 						span.icon-bar
 						span.icon-bar
 						span.icon-bar
-					a.navbar-brand(href='/') Greenex
+					a.navbar-brand(href='#/') Greenex
 				#navbar-collapse.collapse.navbar-collapse
 					ul.nav.navbar-nav
 						li: a(href='#/plants') Plantes
 						li: a(href='#/users') Utilisateurs
 						li.dropdown
-							a.dropdown-toggle(data-toggle='dropdown', href='#') Mon compte
+							a.dropdown-toggle(data-toggle='dropdown') Mon compte
 								b.caret
 							ul.dropdown-menu
 								li: a(href='#/profile') Mes paramètres

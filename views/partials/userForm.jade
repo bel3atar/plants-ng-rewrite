@@ -1,20 +1,20 @@
-form(role='form', name='f')
+form(role='form', name='f', novalidate)
 	.form-group
 		label(for="name") Nom
 		input#name.form-control(required, ng-model='user.name')
 	.form-group
 		label(for="role") Rôle
 		select#role.form-control(ng-model='user.role')
-			option(value='Client' selected) Client
+			option(value='Client') Client
 			option(value='Administrateur') Administrateur
 			option(value='Responsable de stock') Responsable de stock
 			option(value='Responsable de production') Responsable de production
-	.form-group
+	.form-group(ng-show='btnCaption !== "Modifier"')
 		label(for="username") Nom d'utilisateur
-		input#pic.form-control(required, ng-model='user.username')
+		input#username.form-control(required, ng-model='user.username')
 	.form-group
 		label(for="password") Mot de passe
-		input#pic.form-control(required, type='password', ng-model='user.password')
+		input#password.form-control(required, type='password', ng-model='user.password')
 	.form-group
-		button.btn.btn-primary.btn-block.btn-lg(ng-click='save()') Ajouter 
+		button.btn.btn-primary.btn-block.btn-lg(ng-click='save()') {{btnCaption}} 
 			span.glyphicon.glyphicon-plus-sign

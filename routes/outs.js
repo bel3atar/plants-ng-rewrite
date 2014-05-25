@@ -1,6 +1,6 @@
 var Plant = require('../models/plant');
 module.exports = function (app) {
-	app.get('/outs/:out', function (req, res, next) {
+	app.get('/api/outs/:out', function (req, res, next) {
 		var id = req.params.out;
 		Plant.aggregate(
 			{$project: {'lots.outs': 1, _id: 0}},

@@ -1,68 +1,53 @@
-var User = require('../models/user')
-	, allowedRoles = [
-			'Client',
-			'Administrateur',
-			'Responsable de stock',
-			'Responsable de production'
-		];
+var User = require('../models/user');
 module.exports = function (app) {
-	function checkRole(req, res, next) {
-		if (allowedRoles.indexOf(req.body.role) === -1)
-			next(new Error('Invalid role ' + req.body.role));
-		else
-			next();
-	};
-	//new
-	app.get('/users/new', function (req, res, next) {
-		res.render('users/new', {title: 'Nouvel utilisateur'});
+	//show
+	app.get('/api/users/:user', function (req, res, next) {
+		User.findById(req.params.user, 'name role username', function (err, u) {
+			if (err) next(err);
+			else if (!u) next();
+			else res.json(u);
+		});
 	});
 	//index
-	app.get('/users', function (req, res, next) {
-		User.find().sort('name').exec(function (err, users) {
+	app.get('/api/users', function (req, res, next) {
+		User.find({}, 'name role username', function (err, users) {
 			if (err) next(err);
-			res.json(users);
+			else res.json(users);
 		});
 	});
 	//create
-	app.post('/users', checkRole, function (req, res, next) {
-		new User({
+	app.post('/api/users', function (req, res, next) {
+		User.register(new User({
 			name: req.body.name,
 			role: req.body.role,
-			username: req.body.username,
-			password: req.body.password
-		}).save(function (err, user) {
+			username: req.body.username
+		}), req.body.password, function (err, user) {
 			if (err) next(err);
 			else res.send(200);
 		});
 	});
 	//delete
-	app.delete('/users/:user', function (req, res, next) {
+	app.delete('/api/users/:user', function (req, res, next) {
 		User.findByIdAndRemove(req.params.user, function (err, pl) { 
 			if (err) next(err);
 			else res.send(200);
 		});
 	});
-	//edit
-	app.get('/users/:user/edit', function (req, res, next) {
-		User.findById(req.params.user, '_id name username role', function (err, user) {
-			if (err) next(err);
-			else res.render('users/edit', {user: user, title: 'Modifier un utilisateur'});
-		});
-	});
 	//update
-	app.put('/users/:user', checkRole, function (req, res, next) {
-		var user = {
-			role: req.body.role,
-			username: req.body.username,
-			name: req.body.name	
-		};
-		if (req.body.password)
-			user.password = req.body.password;
-		
-		User.findByIdAndUpdate(req.params.user, user, function (err) {
-				if (err) next(err);
-				else res.redirect('/users');
+	app.put('/api/users/:user', function (req, res, next) {
+		User.findById(req.params.user, function (err, user) {
+			function go(user) {
+				user.save(function (err, user, aff) {
+					if (err) next(err);
+					else res.send(200);
+				});
 			}
-		);
+			user.role = req.body.role;
+			user.name = req.body.name;
+			if (req.body.password)
+				user.setPassword(req.body.password, go.bind(null, user));
+			else
+				go(user);
+		});
 	});
 };

@@ -8,4 +8,4 @@
 				a.btn.btn-primary(href='#/plants/{{plant._id}}/lots') Lots en stock 
 					span.glyphicon.glyphicon-log-in
 		.col-md-4
-			img.img-thumbnail(data-ng-src='/images/{{plant.image}}', alt="{{plant.name}}")
+			img.img-thumbnail(ng-src="/images/{{plant.image || 'loading.gif'}}", alt="{{plant.name}}")

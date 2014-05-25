@@ -22,6 +22,17 @@ angular.module('plantControllers', ['angularFileUpload'])
 	function ($params, $scope, Plant) {
 		$scope.btnCaption = 'Modifier';
 		$scope.plant = Plant.get({id: $params.id});
+		$scope.getFile = function (file) { $scope.file = file; };
+		$scope.save = function () {
+			$upload.upload({
+				url: '/plants',
+				mathod: 'PUT',
+				data: $scope.plant, 
+				file: $scope.file
+			}).success(function () {
+				$location.path('/plants');
+			});
+		};
 	}
 ])
 .controller('PlantShowCtrl', ['$routeParams', '$scope', 'Plant',

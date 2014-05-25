@@ -1,14 +1,13 @@
 {
-  "name": "application-name",
-  "version": "0.0.3",
-  "private": true,
+  "name": "greenex",
   "directory": "public/bowers",
   "dependencies": {
-    "angular-resource": "*",
-    "angular-latest": "*",
-    "angular-route": "*",
-    "bootstrap": "*",
-    "jquery": "*",
-    "ng-file-upload": "~1.4.0"
+    "angular-notify-toaster": "~0.4.7",
+    "angular-resource": "~1.2.16",
+    "angular-latest": "~1.2.16",
+    "ng-file-upload": "~1.4.0",
+    "angular-route": "~1.2.16",
+    "bootstrap": "~3.1.1",
+    "jquery": "~2.1.1"
   }
 }

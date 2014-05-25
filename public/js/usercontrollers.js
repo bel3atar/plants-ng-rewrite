@@ -27,11 +27,33 @@ angular.module('userControllers', [])
 .controller('UserEditCtrl', ['$scope', 'User', '$location', '$routeParams',
 	function ($scope, User, $location, $rps) {
 		$scope.btnCaption = 'Modifier';
-		$scope.user = User.query({id: $rps.id});
+		$scope.user = User.get({id: $rps.id});
 		$scope.save = function () {
-			User.save({id: $scope.id}, $scope.user, function () {
+			console.log('updating ' + $scope.user._id);
+			User.update({id: $scope.user._id}, {
+				name: $scope.user.name,
+				role: $scope.user.role,
+				password: $scope.user.password
+			}, function () {
 				$location.path('/users');
 			});
+		};
+	}
+])
+.controller('LoginCtrl', ['$scope', '$http', '$window', '$location', 'toaster',
+	function ($scope, $http, $window, $loc, toaster) {
+		$scope.login = function () {
+			$http
+				.post('/login', $scope.user)
+				.success(function (data, status, headers, config) {
+					$window.sessionStorage.token = data.token;
+					$loc.path('/');
+					toaster.pop('success', 'Bienvenue ', 'Texte');
+				})
+				.error(function (data, status, headers, config) {
+					delete $window.sessionStorage.token;
+					toaster.pop('error', 'Erreur', "Vous n'êtes pas autorisés à accéder");
+				});
 		};
 	}
 ])

@@ -18,6 +18,7 @@
     "commit": "8f8125fedf285ed620b50a5dd8b01d86b2fbf7cf"
   },
   "_source": "git://github.com/angular/angular.js.git",
-  "_target": "*",
-  "_originalSource": "angular-latest"
+  "_target": "~1.2.16",
+  "_originalSource": "angular-latest",
+  "_direct": true
 }

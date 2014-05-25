@@ -2,7 +2,7 @@ var Plant = require('../models/plant'),
 		OId = require('mongoose').Types.ObjectId;
 module.exports = function (app) {
 	//informations sur le lot
-	app.get('/lots/:lot', function (req, res, next) {
+	app.get('/api/lots/:lot', function (req, res, next) {
 		console.log(req.params.lot);
 		Plant.aggregate(
 			{$unwind: '$lots'},
@@ -25,7 +25,7 @@ module.exports = function (app) {
 		});
 	});
 	//outs index
-	app.get('/lots/:lot/outs', function (req, res, next) {
+	app.get('/api/lots/:lot/outs', function (req, res, next) {
 		Plant.findOne({'lots._id': req.params.lot}, {'lots.$.outs': 1, name: 1},
 			function (err, data) {
 				if (err) next(err);
@@ -35,7 +35,7 @@ module.exports = function (app) {
 		);
 	});
 	//outs create
-	app.post('/lots/:lot/outs', function (req, res, next) {
+	app.post('/api/lots/:lot/outs', function (req, res, next) {
 		Plant.findOneAndUpdate(
 			{'lots._id': req.params.lot},
 			{$push: {'lots.$.outs': req.body}},
@@ -46,7 +46,7 @@ module.exports = function (app) {
 		);
 	});
 	//index
-	app.get('/plants/:plant/lots', function (req, res, next) {
+	app.get('/api/plants/:plant/lots', function (req, res, next) {
 		Plant.findById(req.params.plant, 'name lots', function (err, plant) {
 			if (err) next(err);
 			else if (!plant) next();
@@ -60,8 +60,7 @@ module.exports = function (app) {
 		});
 	});
 	//lots create
-	app.post('/plants/:plant/lots', function (req, res, next) {
-		console.log('HIT');
+	app.post('/api/plants/:plant/lots', function (req, res, next) {
 		Plant.findById(req.params.plant, 'pmup lots', function (err, plant) {
 			var cb = function (err) { if (err) next(err); else res.send(200);};
 			if (err) return cb(err);
