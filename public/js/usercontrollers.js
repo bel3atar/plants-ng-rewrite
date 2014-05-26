@@ -1,5 +1,16 @@
 'use strict';
 
+function url_base64_decode(str) {
+	var output = str.replace('-', '+').replace('_', '/');
+	switch (output.length % 4) {
+		case 0: break;
+		case 2: output += '=='; break;
+		case 3: output += '='; break;
+		default: throw 'Illegal base64url string!';
+	}
+	return window.atob(output);
+}
+
 angular.module('userControllers', [])
 
 .controller('UserIndexCtrl', ['$scope', 'User',
@@ -40,18 +51,21 @@ angular.module('userControllers', [])
 		};
 	}
 ])
-.controller('LoginCtrl', ['$scope', '$http', '$window', '$location', 'toaster',
-	function ($scope, $http, $window, $loc, toaster) {
+.controller('LoginCtrl', ['$scope', '$http', '$window', '$location', 'toaster', 'Session',
+	function ($scope, $http, $window, $loc, toaster, Session) {
 		$scope.login = function () {
 			$http
 				.post('/login', $scope.user)
 				.success(function (data, status, headers, config) {
-					$window.sessionStorage.token = data.token;
+					Session.set('token', data.token);
+					var user = JSON.parse(url_base64_decode(data.token.split('.')[1]));	
+					Session.set('name', user.name);
+					Session.set('role', user.role);
 					$loc.path('/');
 					toaster.pop('success', 'Bienvenue ', 'Texte');
 				})
 				.error(function (data, status, headers, config) {
-					delete $window.sessionStorage.token;
+					Session.clr();
 					toaster.pop('error', 'Erreur', "Vous n'êtes pas autorisés à accéder");
 				});
 		};

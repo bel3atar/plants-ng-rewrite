@@ -1,6 +1,7 @@
 'use strict';
 angular.module('appNav', [])
-.controller('navCtrl', ['$window',
-	function ($window) {
+.controller('navCtrl', ['Session', '$scope',
+	function (Session, $scope) {
+		$scope.username = Session.get('name');
 	}
 ])

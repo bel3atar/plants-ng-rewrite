@@ -36,7 +36,8 @@ html(lang='fr', ng-app='greenex')
 						li: a(href='#/plants') Plantes
 						li: a(href='#/users') Utilisateurs
 						li.dropdown
-							a.dropdown-toggle(data-toggle='dropdown') Mon compte
+							a.dropdown-toggle(data-toggle='dropdown') 
+								| Mon compte {{username || ''}}
 								b.caret
 							ul.dropdown-menu
 								li: a(href='#/profile') Mes paramètres

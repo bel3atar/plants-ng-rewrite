@@ -23,4 +23,13 @@ angular.module('appServices', ['ngResource'])
 		return $resource('/api/users/:id', {id: '@id'}, {update: {method: 'PUT'}});
 	}
 ])
+.factory('Session', ['$window',
+	function ($window) {
+		return {
+			get: function (key) { return $window.sessionStorage[key]; },
+			set: function (k,v) { $window.sessionStorage[k] = v;      },
+			clr: function ()    { $window.sessionStorage.clear();     }
+		};
+	}
+])
 
