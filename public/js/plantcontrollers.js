@@ -9,7 +9,7 @@ angular.module('plantControllers', ['angularFileUpload'])
 		$scope.getFile = function (file) { $scope.file = file; };
 		$scope.save = function () {
 			$upload.upload({
-				url: '/plants',
+				url: '/api/plants',
 				data: $scope.plant, 
 				file: $scope.file
 			}).success(function () {
@@ -25,7 +25,7 @@ angular.module('plantControllers', ['angularFileUpload'])
 		$scope.getFile = function (file) { $scope.file = file; };
 		$scope.save = function () {
 			$upload.upload({
-				url: '/plants',
+				url: '/api/plants',
 				mathod: 'PUT',
 				data: $scope.plant, 
 				file: $scope.file

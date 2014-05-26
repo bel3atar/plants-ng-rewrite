@@ -16,11 +16,13 @@ html(lang='fr', ng-app='greenex')
 		script(src='/bowers/ng-file-upload/angular-file-upload.min.js')
 		script(src='/js/usercontrollers.js')
 		script(src='/js/plantcontrollers.js')
+		script(src='/js/appnav.js')
+		script(src='/js/misc.js')
 		script(src='/js/services.js')
 		script(src='/js/app.js')
 	body
 		toaster-container
-		nav.navbar.navbar-default(role='navigation')
+		nav.navbar.navbar-default(ng-controller='navCtrl', role='navigation')
 			.container-fluid
 				.navbar-header
 					button.navbar-toggle(type='button', data-toggle="collapse", data-target="#navbar-collapse")
