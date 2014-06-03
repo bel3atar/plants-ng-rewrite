@@ -32,4 +32,6 @@ angular.module('appServices', ['ngResource'])
 		};
 	}
 ])
-
+.factory('Socket', ['socketFactory', function (sf) {
+	return sf();
+}])

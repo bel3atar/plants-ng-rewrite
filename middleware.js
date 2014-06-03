@@ -1,7 +1,6 @@
 var passport = require('passport');
 module.exports = function (app, secret) {
 	app.use(require('morgan')({format: 'dev'}));
-	//app.use(require('cookie-parser')());
 	app.use('/api', require('express-jwt')({secret: secret}));
 	app.use(require('body-parser')());
 	app.use(passport.initialize());

@@ -7,6 +7,7 @@
     "angular-latest": "~1.2.16",
     "ng-file-upload": "~1.4.0",
     "angular-route": "~1.2.16",
+    "angular-socket-io": "*",
     "bootstrap": "~3.1.1",
     "jquery": "~2.1.1"
   }

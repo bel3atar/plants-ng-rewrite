@@ -1,5 +1,5 @@
 'use strict';
-var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'plantControllers', 'appServices', 'toaster', 'miscStuff'])
+var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'plantControllers', 'appServices', 'toaster', 'miscStuff', 'btford.socket-io'])
 .config(['$routeProvider',
 	function ($routeProvider) {
 		$routeProvider

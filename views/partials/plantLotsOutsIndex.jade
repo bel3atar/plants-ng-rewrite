@@ -11,7 +11,7 @@ style tbody tr { cursor: pointer }
 			th Quantité brute
 			th Quantité nette
 		tbody
-			tr(ng-repeat='out in outs')
+			tr(ng-click='go(out._id)', ng-repeat='out in outs')
 				td {{out.date | date}}
 				td {{out.raw}}
 				td {{out.net}}

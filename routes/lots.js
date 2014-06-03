@@ -1,6 +1,6 @@
 var Plant = require('../models/plant'), 
 		OId = require('mongoose').Types.ObjectId;
-module.exports = function (app) {
+module.exports = function (app, io) {
 	//informations sur le lot
 	app.get('/api/lots/:lot', function (req, res, next) {
 		console.log(req.params.lot);
@@ -62,7 +62,13 @@ module.exports = function (app) {
 	//lots create
 	app.post('/api/plants/:plant/lots', function (req, res, next) {
 		Plant.findById(req.params.plant, 'pmup lots', function (err, plant) {
-			var cb = function (err) { if (err) next(err); else res.send(200);};
+			var cb = function (err, item) { 
+				if (err) next(err); 
+				else {
+					res.send(200);
+					io.emit('newLot', item.lots.pop());
+				}
+			};
 			if (err) return cb(err);
 			if (plant.pmup) {
 				var somme = 0.0;

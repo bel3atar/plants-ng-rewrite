@@ -1,5 +1,5 @@
 var Plant = require('../models/plant');
-module.exports = function (app) {
+module.exports = function (app, io) {
 	//show
 	app.get('/api/plants/:plant', function (req, res, next) {
 		Plant.findById(req.params.plant, function (err, plant) {
@@ -57,6 +57,6 @@ module.exports = function (app) {
 		);
 	});
 	//sub-resources
-	require('./lots.js')(app);
+	require('./lots.js')(app, io);
 	require('./outs.js')(app);
 };

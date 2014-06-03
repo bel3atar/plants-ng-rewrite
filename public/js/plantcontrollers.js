@@ -68,8 +68,12 @@ angular.module('plantControllers', ['angularFileUpload'])
 		});
 	}
 ])
-.controller('PlantLotsIndexCtrl', ['$routeParams', '$scope', 'Plant', '$location',
-	function ($params, $scope, Plant, $location) {
+.controller('PlantLotsIndexCtrl', ['$routeParams', '$scope', 'Plant', '$location', 'Socket',
+	function ($params, $scope, Plant, $location, Socket) {
+		Socket.forward('newLot', $scope);
+		$scope.$on('socket:newLot', function (ev, lot) {
+			$scope.lots.push(lot);
+		});
 		$scope.setLotId = function (id) {
 			$location.path('/plants/' + $params.plant + '/lots/' + id + '/outs');
 		};
@@ -86,8 +90,8 @@ angular.module('plantControllers', ['angularFileUpload'])
 	}
 ])
 
-.controller('PlantLotsNewCtrl', ['$routeParams', '$scope', 'Plant',
-	function ($params, $scope, Plant) {
+.controller('PlantLotsNewCtrl', ['$routeParams', '$scope', 'Plant', '$location',
+	function ($params, $scope, Plant, $loc) {
 		$scope.add = function () {
 			Plant.save({id: $params.plant, action: 'lots'}, $scope.lot, function () {
 				$loc.path('/plants/' + $params.plant + '/lots');
@@ -106,6 +110,9 @@ angular.module('plantControllers', ['angularFileUpload'])
 				id: data.lots[0]._id
 			}
 			$scope.outs = data.lots[0].outs;
+			$scope.go = function (id) {
+				console.log(id);
+			};
 		});
 	}
 ])
