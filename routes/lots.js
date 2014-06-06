@@ -3,24 +3,30 @@ var Plant = require('../models/plant'),
 module.exports = function (app, io) {
 	//informations sur le lot
 	app.get('/api/lots/:lot', function (req, res, next) {
-		console.log(req.params.lot);
-		Plant.aggregate(
+		var pipeline = [
 			{$unwind: '$lots'},
 			{$match: {'lots._id': new OId(req.params.lot)}},
-			{$project: {'lots.outs': 1, 'lots.quantity': 1, name: 1}},
-			{$unwind: '$lots.outs'},
-			{$group: {
-				_id: {plant: '$name', quantity: '$lots.quantity'},
-				totalOuts: {$sum: '$lots.outs.raw'}
-			}}
-		).exec(function (err, data) {
-			if (err) next(err);
-			else if (!data) next();
-			else {
-				var o = data[0];
-				res.json({
-					plant: o._id.plant, quantity: o._id.quantity, out: o.totalOuts
+			{$project: {'lots.outs': 1, 'lots.quantity': 1, name: 1}}
+		];
+		Plant.aggregate(pipeline).exec(function (err, data) {
+			if (err) return next(err);
+			if (!data) return next();
+			data = data[0];
+			var response = {plant: data.name, quantity: data.lots.quantity, out: 0};
+			if (data.lots.outs.length !== 0) {
+				Plant.aggregate(pipeline).append(
+					{$unwind: '$lots.outs'},
+					{$group: {_id: null, totalOuts: {$sum: '$lots.outs.raw'}}}
+				).exec(function (err, data) {
+					if (err) return next(err);
+					else if (!data) return next();
+					else {
+						response.out = data[0].totalOuts;
+						res.json(response);
+					}
 				});
+			} else {
+				res.json(response);
 			}
 		});
 	});
