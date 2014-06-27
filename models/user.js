@@ -5,6 +5,7 @@ var schema = new mongoose.Schema({
 			'Client',
 			'Administrateur',
 			'Responsable de stock',
+			'Responsable de ventes',
 			'Responsable de production'
 	]}
 });

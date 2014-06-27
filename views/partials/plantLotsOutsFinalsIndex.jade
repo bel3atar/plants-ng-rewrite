@@ -1,0 +1,42 @@
+style tbody tr { cursor: pointer }
+.jumbotron(ng-hide='data.finals.length !==0')
+	h1 Aucun produit fini issu de cette sortie
+	p Il n'y a toujours pas de produit fini créé suite à cette sortie vers production de {{data.plantName}}. Le bouton ci-dessous pourrait vous aider.
+.row(ng-hide='data.finals.length === 0')
+	.page-header: h1 Sortie vers production de {{data.plantName}} du {{data.outDate | date}} 
+		small Produits finis
+	.table-responsive: table.table-striped.table-hover.table
+		thead
+			th Date
+			th Produit
+			th Quantité
+			th Prix de vente
+			th
+		tbody
+			tr(ng-repeat='final in data.finals')
+				td {{final.date | date}}
+				td {{final.name}}
+				td {{final.quantity}}
+				td {{final.retail}}
+				td(ng-hide='sold') 
+					button.btn.btn-xs.btn-success(ng-click='sell(final._id, final.quantity)')
+						span.glyphicon.glyphicon-barcode
+a.btn.btn-lg.btn-block.btn-primary(href='#/plants/{{data.plantId}}/lots/{{data.lotId}}/outs/{{data.outId}}/finals/new') Nouveau produit fini 
+	span.glyphicon.glyphicon-plus-sign
+.modal.fade#myModal(role='dialog', aria-hidden='true', aria-labelledby='sell')
+	.modal-dialog
+		.modal-content
+			.modal-header
+				button.close(type='button', data-dismiss='modal')
+					span(aria-hidden=true) &times;
+					span.sr-only Close
+				h4.modal-title#modalLabel Combien avez-vous vendu?
+			.modal-body
+				form(novalidate, name='selling', role='form')
+					.form-group
+						label(for='howmuch') Nombre d'unités vendues
+						input#howmuch.form-control(ng-model='howmuch', required, name='howmuch', type='number', min=1, ng-class="{'has-error': selling.howmuch.$invalid && selling.howmuch.$dirty}", max=100)
+			.modal-footer
+				button.btn.btn-default(data-dismiss='modal', type='button') Fermer
+				button.btn.btn-primary(ng-disabled='selling.$invalid', type='button', ng-click='dosell()') Vendre
+

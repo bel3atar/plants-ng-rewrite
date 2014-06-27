@@ -4,13 +4,14 @@ module.exports = function (app, io) {
 	//informations sur le lot
 	app.get('/api/lots/:lot', function (req, res, next) {
 		var pipeline = [
-			{$unwind: '$lots'},
 			{$match: {'lots._id': new OId(req.params.lot)}},
+			{$unwind: '$lots'},
 			{$project: {'lots.outs': 1, 'lots.quantity': 1, name: 1}}
 		];
 		Plant.aggregate(pipeline).exec(function (err, data) {
 			if (err) return next(err);
 			if (!data) return next();
+			console.log(data);
 			data = data[0];
 			var response = {plant: data.name, quantity: data.lots.quantity, out: 0};
 			if (data.lots.outs.length !== 0) {
@@ -67,6 +68,7 @@ module.exports = function (app, io) {
 	});
 	//lots create
 	app.post('/api/plants/:plant/lots', function (req, res, next) {
+		console.log(req.body);
 		Plant.findById(req.params.plant, 'pmup lots', function (err, plant) {
 			var cb = function (err, item) { 
 				if (err) next(err); 

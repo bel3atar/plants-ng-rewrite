@@ -14,23 +14,25 @@ angular.module('plantControllers', ['angularFileUpload'])
 				file: $scope.file
 			}).success(function () {
 				$location.path('/plants');
+				$location.replace();
 			});
 		};
 	}
 ])
-.controller('PlantEditCtrl', ['$routeParams', '$scope', 'Plant',
-	function ($params, $scope, Plant) {
+.controller('PlantEditCtrl', ['$routeParams', '$scope', 'Plant', '$upload',
+	function ($params, $scope, Plant, $upload) {
 		$scope.btnCaption = 'Modifier';
 		$scope.plant = Plant.get({id: $params.id});
 		$scope.getFile = function (file) { $scope.file = file; };
 		$scope.save = function () {
 			$upload.upload({
-				url: '/api/plants',
-				mathod: 'PUT',
+				url: '/api/plants/' + $params.id,
+				method: 'PUT',
 				data: $scope.plant, 
 				file: $scope.file
 			}).success(function () {
 				$location.path('/plants');
+				$location.replace();
 			});
 		};
 	}
@@ -72,11 +74,17 @@ angular.module('plantControllers', ['angularFileUpload'])
 	function ($params, $scope, Plant, $location, Socket) {
 		Socket.forward('newLot', $scope);
 		$scope.$on('socket:newLot', function (ev, lot) {
-			$scope.lots.push(lot);
+			lot.remaining = lot.quantity;
+			for (var i = 0; i < $scope.lots.length; ++i)
+				if ($scope.lots[i]._id === lot._id) 
+					break;
+			if (i === $scope.lots.length) $scope.lots.push(lot);
 		});
+
 		$scope.setLotId = function (id) {
 			$location.path('/plants/' + $params.plant + '/lots/' + id + '/outs');
 		};
+
 		var data = Plant.query({id: $params.plant, action: 'lots'}, function () {
 			$scope.plant = {name: data.name, id: data.id};
 			data.lots.forEach(function (lot) {
@@ -85,6 +93,7 @@ angular.module('plantControllers', ['angularFileUpload'])
 					sum += lot.outs[i].raw;
 				lot.remaining = lot.quantity - sum;
 			});
+
 			$scope.lots  = data.lots;
 		});
 	}
@@ -100,8 +109,8 @@ angular.module('plantControllers', ['angularFileUpload'])
 	}
 ])
 
-.controller('PlantLotsOutsIndexCtrl', ['$routeParams', '$scope', 'Lot',
-	function ($params, $scope, Lot) {
+.controller('PlantLotsOutsIndexCtrl', ['$routeParams', '$scope', 'Lot', '$location',
+	function ($params, $scope, Lot, $location) {
 		var data = Lot.query({lot: $params.lot, action: 'outs'}, function () {
 			$scope.lot = {
 				plantname: data.name,
@@ -111,9 +120,29 @@ angular.module('plantControllers', ['angularFileUpload'])
 			}
 			$scope.outs = data.lots[0].outs;
 			$scope.go = function (id) {
-				console.log(id);
+				$location.path(
+					'/plants/' + $params.plant + '/lots/' + $params.lot + '/outs/'
+					+ id + '/finals'
+				);
 			};
 		});
+	}
+])
+.controller('PlantLotsOutsFinalsNewCtrl', ['Out', '$routeParams', '$scope', '$location', 'Package',
+	function (Out, $rps, $scope, $location, Package) {
+		$scope.final = {};
+		$scope.outId = $rps.out;
+		var packs = Package.query(function () {
+			$scope.packages = packs.packages; 
+			$scope.final.package = packs.packages[0];
+		});
+		$scope.save = function () {
+			Out.save({out: $rps.out, action: 'finals'}, $scope.final, function () {
+				$location.path(
+					'/plants/' + $rps.plant + '/lots/' + $rps.lot + '/outs/' + $rps.out + '/finals');			
+				$location.replace();
+			});
+		};
 	}
 ])
 .controller('PlantLotsOutsNewCtrl', [
@@ -130,5 +159,29 @@ angular.module('plantControllers', ['angularFileUpload'])
 				$loc.path('/plants/' + $rps.plant + '/lots/' + $rps.lot + '/outs');			
 			});
 		};
+	}
+])
+.controller('PlantLotsOutsFinalsIndexCtrl', ['Out', '$routeParams', '$scope', '$location', 'Final',
+	function (Out, $rps, $scope, $location, Final) {
+		$scope.sell = function (id, quantity) {
+			console.log($('#myModal').modal());
+			$scope.gonnasell = id;
+			$("#howmuch").attr('max', quantity);
+		};
+		$scope.dosell = function () {
+			Final.save(
+				{final: $scope.gonnasell, action: 'sell'},
+				{howmuch: $scope.howmuch},
+				function () {
+					$('#myModal').modal('hide');
+					var data = Out.query({out: $rps.out, action: 'finals'}, function () {
+						$scope.data = data;
+					});
+				}
+			);
+		};
+		var data = Out.query({out: $rps.out, action: 'finals'}, function () {
+			$scope.data = data;
+		});
 	}
 ])

@@ -1,11 +1,13 @@
 'use strict';
-var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'plantControllers', 'appServices', 'toaster', 'miscStuff', 'btford.socket-io'])
+function mustLogin() {
+}
+var app = angular.module('greenex', ['packageControllers', 'appNav', 'ngRoute', 'userControllers', 'plantControllers', 'appServices', 'toaster', 'miscStuff', 'btford.socket-io'])
 .config(['$routeProvider',
 	function ($routeProvider) {
 		$routeProvider
 		.when('/users', {
 			templateUrl: '/partials/userIndex',
-			controller: 'UserIndexCtrl'
+			controller: 'UserIndexCtrl',
 		})
 		.when('/users/new', {
 			templateUrl: '/partials/userForm',
@@ -19,9 +21,22 @@ var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'pl
 			templateUrl: '/partials/userForm',
 			controller: 'UserEditCtrl'
 		})
+		.when('/packages', {
+			templateUrl: '/partials/packageIndex',
+			controller: 'PackageIndexCtrl'
+		})
+		.when('/packages/new', {
+			templateUrl: '/partials/packageForm',
+			controller: 'PackageNewCtrl'
+		})
+		.when('/packages/:package/edit', {
+			templateUrl: '/partials/packageForm',
+			controller: 'PackageEditCtrl'
+		})
 		.when('/plants', {
 			templateUrl: '/partials/plantIndex',
-			controller: 'PlantIndexCtrl'
+			controller: 'PlantIndexCtrl',
+			resolve: {auth: mustLogin}
 		})
 		.when('/plants/new', {
 			templateUrl: '/partials/plantForm',
@@ -47,6 +62,14 @@ var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'pl
 			templateUrl: '/partials/plantLotsOutsNew',
 			controller: 'PlantLotsOutsNewCtrl'
 		})
+		.when('/plants/:plant/lots/:lot/outs/:out/finals', {
+			templateUrl: '/partials/plantLotsOutsFinalsIndex',
+			controller: 'PlantLotsOutsFinalsIndexCtrl'
+		})
+		.when('/plants/:plant/lots/:lot/outs/:out/finals/new', {
+			templateUrl: '/partials/plantLotsOutsFinalsNew',
+			controller: 'PlantLotsOutsFinalsNewCtrl'
+		})
 		.when('/plants/:id/edit', {
 			templateUrl: '/partials/plantForm',
 			controller: 'PlantEditCtrl'
@@ -55,8 +78,8 @@ var app = angular.module('greenex', ['appNav', 'ngRoute', 'userControllers', 'pl
 			templateUrl: '/partials/login',
 			controller: 'LoginCtrl'
 		})
-		.when('/', {controller: 'rootCtrl', template: ''})
-		.otherwise({redirectTo: '/'});
+		.when('/', {redirectTo: '/login'})
+		.otherwise({redirectTo: '/login'});
 	}
 ])
 .config(['$httpProvider', function ($httpProvider) {

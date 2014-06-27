@@ -1,0 +1,41 @@
+.page-header
+	h1 Ajouter un nouveau produit fini
+
+form(name='f', novalidate, role='form')
+	fieldset
+		.form-group
+			label.control-label(for='name') Nom
+			input#name.form-control.input-lg(
+				required,
+				name='name',
+				ng-model='final.name',
+				type='text'
+			)
+		.form_group
+			label.control-label(for='quantity') Quantité
+			input#quantity.form-control.input-lg(
+				required,
+				name='quantity',
+				ng-model='final.quantity',
+				type='number',
+				min=0,
+				step=1
+			)
+		.form-group
+			label.control-label(for='date') Date de production
+			input#date.form-control.input-lg(
+				required, ng-model='final.date', type='date', name='date'
+			)
+		.form-group
+			label.control-label(for='retail') Prix de vente
+			input#retail.form-control.input-lg(
+				required,
+				name='retail',
+				ng-model='final.retail',
+				type='number'
+			)
+		.form-group
+			label.control-label(for='package') Emballage
+			select#package.form-control(name='package', ng-options='package.name for package in packages', ng-model='final.package')
+		button.btn.btn-primary.btn-block.btn-lg(ng-disabled='f.$invalid', ng-click='save()') Ajouter 
+			span.glyphicon.glyphicon-plus-sign

@@ -1,0 +1,16 @@
+form
+	.form-group
+		label(for="nom") Nom
+		input.form-control#nom(ng-model="package.name", placeholder="Nom de l'emballage")
+	.form-group
+		label(for="desc") Description
+		textarea.form-control#desc(ng-model="package.desc")
+	.form-group
+		label(for="cost") Description
+		textarea.form-control#cost(ng-model="package.cost")
+	.form-group
+		label(for="pic") Image
+		input.form-control#pic(type='file', ng-file-select="getFile($files[0])")
+	.form-group
+		button.btn.btn-block.btn-lg.btn-primary(ng-click="save()") {{btnCaption}} 
+			span.glyphicon.glyphicon-plus-sign

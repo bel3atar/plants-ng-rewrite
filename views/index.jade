@@ -18,13 +18,14 @@ html(lang='fr', ng-app='greenex')
 		script(src='/bowers/ng-file-upload/angular-file-upload.min.js')
 		script(src='/js/usercontrollers.js')
 		script(src='/js/plantcontrollers.js')
-		script(src='/js/appnav.js')
+		script(src='/js/packagecontrollers.js')
+		script(src='/js/appcontroller.js')
 		script(src='/js/misc.js')
 		script(src='/js/services.js')
 		script(src='/js/app.js')
-	body
+	body(ng-controller='appCtrl')
 		toaster-container
-		nav.navbar.navbar-default(ng-controller='navCtrl', role='navigation')
+		nav.navbar.navbar-default(role='navigation')
 			.container-fluid
 				.navbar-header
 					button.navbar-toggle(type='button', data-toggle="collapse", data-target="#navbar-collapse")
@@ -34,8 +35,9 @@ html(lang='fr', ng-app='greenex')
 						span.icon-bar
 					a.navbar-brand(href='#/') Greenex
 				#navbar-collapse.collapse.navbar-collapse
-					ul.nav.navbar-nav
+					ul.nav.navbar-nav(ng-show='logged')
 						li: a(href='#/plants') Plantes
+						li: a(href='#/packages') Emballages
 						li: a(href='#/users') Utilisateurs
 						li.dropdown
 							a.dropdown-toggle(data-toggle='dropdown') 
@@ -48,4 +50,4 @@ html(lang='fr', ng-app='greenex')
 								li: a(href='#/logout') Me déconnecter
 		.container
 			div(ng-view)
-		footer: p ©2014 bel3atar
+		footer.pull-right: p ©2014 EMSI

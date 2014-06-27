@@ -51,21 +51,25 @@ angular.module('userControllers', [])
 		};
 	}
 ])
-.controller('LoginCtrl', ['$scope', '$http', '$window', '$location', 'toaster', 'Session',
-	function ($scope, $http, $window, $loc, toaster, Session) {
+.controller('LoginCtrl', ['$scope', '$http', '$window', '$location', 'toaster', 'Session', '$rootScope',
+	function ($scope, $http, $window, $loc, toaster, Session, $rootScope) {
 		$scope.login = function () {
 			$http
 				.post('/login', $scope.user)
 				.success(function (data, status, headers, config) {
 					Session.set('token', data.token);
+					Session.set('logged', true);
 					var user = JSON.parse(url_base64_decode(data.token.split('.')[1]));	
+					$rootScope.logged = true;
 					Session.set('name', user.name);
 					Session.set('role', user.role);
-					$loc.path('/');
-					toaster.pop('success', 'Bienvenue ', 'Texte');
+					$loc.path('/plants');
+					toaster.pop('success', 'Bienvenue ', 'Vos identifiants sont autorisés');
 				})
 				.error(function (data, status, headers, config) {
+					$rootScope.logged = false;
 					Session.clr();
+					Session.set('logged', false);
 					toaster.pop('error', 'Erreur', "Vous n'êtes pas autorisés à accéder");
 				});
 		};

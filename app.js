@@ -14,6 +14,7 @@ require('./auth')(app, secret);
 
 require('./routes/plants')(app, io);
 require('./routes/users')(app);
+require('./routes/packages')(app);
 
 app.get('/partials/:partial', function (req, res, next) {
 	res.render('partials/' + req.params.partial);
