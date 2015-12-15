@@ -1,4 +1,4 @@
-require('mongoose').connect('mongodb://localhost/plants');
+require('mongoose').connect('mongodb://test:test@ds027505.mongolab.com:27505/bel3atar');
 
 var app = require('express')()
   , secret = '*@Ccn083#$%89v_8n-M*ewfnw!_+'
